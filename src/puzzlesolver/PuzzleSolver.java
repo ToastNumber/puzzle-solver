@@ -9,7 +9,7 @@ import java.util.Set;
 
 public class PuzzleSolver {
 	public static final String PATH_NOT_FOUND = "PATH NOT FOUND";
-	
+
 	public static String calculateSolution(Puzzle puzzle) {
 		Queue<Puzzle> q = new Queue<>();
 		q.push(puzzle);
@@ -19,21 +19,23 @@ public class PuzzleSolver {
 		while (!q.isEmpty()) {
 			Puzzle current = q.pop();
 
-			if (current.isSolved()) return reconstructPath(map, current);
-			else {
-				visited.add(current);
-				List<Puzzle> successors = getSuccessors(current);
+			if (!visited.contains(current)) {
+				if (current.isSolved()) return reconstructPath(map, current);
+				else {
+					visited.add(current);
+					List<Puzzle> successors = getSuccessors(current);
 
-				for (Puzzle successor : successors) {
-					if (!visited.contains(successor)) {
-						q.push(successor);
-						map.put(successor, current);
+					for (Puzzle successor : successors) {
+						if (!visited.contains(successor)) {
+							q.push(successor);
+							map.put(successor, current);
+						}
 					}
 				}
-			}
+			} 
 		}
 
-		return "PATH NOT FOUND";
+		return PATH_NOT_FOUND;
 	}
 
 	private static String reconstructPath(Map<Puzzle, Puzzle> map, Puzzle end) {
@@ -48,7 +50,7 @@ public class PuzzleSolver {
 
 		return svaret;
 	}
-	
+
 	private static List<Puzzle> getSuccessors(Puzzle p) {
 		List<Puzzle> svaret = new ArrayList<>();
 		Move[] moves = { Move.UP, Move.RIGHT, Move.DOWN, Move.LEFT };
@@ -59,5 +61,5 @@ public class PuzzleSolver {
 
 		return svaret;
 	}
-
+	
 }
