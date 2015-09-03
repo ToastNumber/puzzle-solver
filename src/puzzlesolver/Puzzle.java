@@ -1,6 +1,5 @@
 package puzzlesolver;
 
-
 public class Puzzle implements Comparable<Puzzle> {
 	private final int[][] elements;
 	private final int width;
@@ -74,7 +73,7 @@ public class Puzzle implements Comparable<Puzzle> {
 	@Override
 	public int hashCode() {
 		String cat = "";
-		
+
 		for (int row = 0; row < height; ++row) {
 			for (int col = 0; col < width; ++col) {
 				cat += elements[row][col];
@@ -178,16 +177,16 @@ public class Puzzle implements Comparable<Puzzle> {
 
 		return copy;
 	}
-	
+
 	public int getScore() {
 		int count = 0;
-		
+
 		for (int row = 0; row < height; ++row) {
 			for (int col = 0; col < width; ++col) {
 				if (elements[row][col] == row * width + col + 1) ++count;
 			}
 		}
-		
+
 		return count;
 	}
 
@@ -196,14 +195,13 @@ public class Puzzle implements Comparable<Puzzle> {
 		return this.getScore() - o.getScore();
 	}
 
-	
 	public static void main(String[] args) {
-		//Puzzle p = new Puzzle(3, 3, "3 6 4 7 5 2 0 1 8");
-		Puzzle p = new Puzzle(4, 4, "6 14 1 2 3 12 11 10 4 7 5 15 9 8 0 13");
+		// Puzzle p = new Puzzle(3, 3, "3 6 4 7 5 2 0 1 8");
+		// Puzzle p = new Puzzle(4, 4, "6 14 1 2 3 12 11 10 4 7 5 15 9 8 0 13");
+		Puzzle p = new Puzzle(4, 4, "1 9 3 7 8 14 4 13 0 5 2 12 6 15 10 11");
 		
 		System.out.println(p);
 		System.out.println(PuzzleSolver.calculateSolution(p));
 	}
-
 
 }
