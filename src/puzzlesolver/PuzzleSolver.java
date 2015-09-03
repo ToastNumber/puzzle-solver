@@ -7,64 +7,56 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 public class PuzzleSolver {
-	private Puzzle puzzle;
-	private String solution;
+	public static final String PATH_NOT_FOUND = "PATH NOT FOUND";
 	
-	public PuzzleSolver(Puzzle puzzle) {
-		this.puzzle = puzzle;
-		
-		solution = calculatePath();
-	}
-	
-	public String getSolution() {
-		return solution;
-	}
-	
-	private String calculatePath() {
+	public static String calculateSolution(Puzzle puzzle) {
 		Queue<Puzzle> q = new Queue<>();
 		q.push(puzzle);
 		Set<Puzzle> visited = new HashSet<>();
-		Map<Puzzle, Pair<Puzzle, Move>> map = new LinkedHashMap<>();
-		
+		Map<Puzzle, Puzzle> map = new LinkedHashMap<>();
+
 		while (!q.isEmpty()) {
 			Puzzle current = q.pop();
-			
-			if (!visited.contains(current)) {
-				if (current.isSolved()) return reconstructPath(map, current);
-				else {
-					visited.add(current);
-					List<Pair<Puzzle, Move>> succ = successors(puzzle);
-					
-					for (Pair<Puzzle, Move> puzzleMove : succ) {
-						Puzzle p = puzzleMove.a();
-						
-						if (!visited.contains(p)) {
-							q.push(p);
-							map.put(p, puzzleMove);
-						}
+
+			if (current.isSolved()) return reconstructPath(map, current);
+			else {
+				visited.add(current);
+				List<Puzzle> successors = getSuccessors(current);
+
+				for (Puzzle successor : successors) {
+					if (!visited.contains(successor)) {
+						q.push(successor);
+						map.put(successor, current);
 					}
 				}
 			}
 		}
-		
+
 		return "PATH NOT FOUND";
 	}
-	
-	private String reconstructPath(Map<Puzzle, Pair<Puzzle, Move>> map, Puzzle current) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-	private List<Pair<Puzzle, Move>> successors(Puzzle p) {
-		List<Pair<Puzzle, Move>> svaret = new ArrayList<>();
-		Move[] moves = {Move.UP, Move.RIGHT, Move.DOWN, Move.LEFT};
+	private static String reconstructPath(Map<Puzzle, Puzzle> map, Puzzle end) {
+		Puzzle current = end;
+		String svaret = "";
+
+		do {
+			Puzzle previous = map.get(current);
+			svaret = Puzzle.getMoveFrom(current, previous) + svaret;
+			current = previous;
+		} while (map.containsKey(current));
+
+		return svaret;
+	}
+	
+	private static List<Puzzle> getSuccessors(Puzzle p) {
+		List<Puzzle> svaret = new ArrayList<>();
+		Move[] moves = { Move.UP, Move.RIGHT, Move.DOWN, Move.LEFT };
 
 		for (Move move : moves) {
-			if (p.canMove(move)) svaret.add(new Pair<Puzzle, Move>(p.move(move), move));
+			if (p.canMove(move)) svaret.add(p.move(move));
 		}
-		
+
 		return svaret;
 	}
 

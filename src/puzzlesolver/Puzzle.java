@@ -1,6 +1,9 @@
 package puzzlesolver;
 
-import java.util.Arrays;
+import org.testng.Assert;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
 
 public class Puzzle {
 	private final int[][] elements;
@@ -34,7 +37,8 @@ public class Puzzle {
 
 		for (int row = 0; row < height; ++row) {
 			for (int col = 0; col < width; ++col) {
-				if (row == 0 && col == 0) continue;
+				int current = elements[row][col];
+				if ((row == 0 && col == 0) || current == 0) continue;
 				else {
 					if (elements[row][col] < previous) return false;
 					else previous = elements[row][col];
@@ -42,7 +46,7 @@ public class Puzzle {
 			}
 		}
 
-		return true;
+		return elements[height - 1][width - 1] == 0;
 	}
 
 	public int[][] getElements() {
@@ -77,6 +81,22 @@ public class Puzzle {
 
 		} else return false;
 	}
+	
+	@Override
+	public int hashCode() {
+		int sum = 0;
+		
+		for (int row = 0; row < height; ++row) {
+			int prod = 1;
+			for (int col = 0; col < width; ++col) {
+				prod *= (elements[row][col] << col);
+			}
+			
+			sum += prod;
+		}
+		
+		return sum;
+	}
 
 	public String toString() {
 		String svaret = "";
@@ -102,6 +122,21 @@ public class Puzzle {
 
 		return new Position(-1, -1);
 	}
+	
+	public static Move getMoveFrom(Puzzle a, Puzzle b) {
+		Position pa = a.getPositionOfSpace();
+		Position pb = b.getPositionOfSpace();
+		
+		if (pa.row == pb.row) {
+			if (pa.col + 1 == pb.col) return Move.RIGHT;
+			else if (pa.col - 1 == pb.col) return Move.LEFT;
+			else return null;
+		} else if (pa.col == pb.col) {
+			if (pa.row + 1 == pb.row) return Move.DOWN;
+			else if (pa.row - 1 == pb.row) return Move.UP;
+			else return null;
+		} else return null;
+	}
 
 	public boolean canMove(Move move) {
 		Position spacePos = getPositionOfSpace();
@@ -109,54 +144,79 @@ public class Puzzle {
 		if (move == Move.UP) {
 			return spacePos.row < height - 1;
 		} else if (move == Move.RIGHT) {
-			return spacePos.column > 0;
+			return spacePos.col > 0;
 		} else if (move == Move.DOWN) {
 			return spacePos.row > 0;
 		} else if (move == Move.LEFT) {
-			return spacePos.column < width - 1;
+			return spacePos.col < width - 1;
 		} else {
 			return false;
 		}
 	}
 
-	public void swap(Position a, Position b) {
-		int temp = elements[a.row][a.column];
-		elements[a.row][a.column] = elements[b.row][b.column];
-		elements[b.row][b.column] = temp;
+	private void swap(Position a, Position b) {
+		int temp = elements[a.row][a.col];
+		elements[a.row][a.col] = elements[b.row][b.col];
+		elements[b.row][b.col] = temp;
 	}
 	
 	@Override
 	public Puzzle clone() {
-		return new Puzzle(width, height, Arrays.copyOf(elements, elements.length));
+		int[][] clonedElements = new int[height][width];
+		for (int row = 0; row < height; ++row) {
+			for (int col = 0; col < width; ++col) {
+				clonedElements[row][col] = elements[row][col];
+			}
+		}
+		
+		return new Puzzle(width, height, clonedElements);
 	}
 
 	public Puzzle move(Move move) {
 		Puzzle copy = this.clone();
-		Position spacePos = getPositionOfSpace();
+		Position spacePos = copy.getPositionOfSpace();
 
 		if (move == Move.UP) {
-			Position below = new Position(spacePos.row + 1, spacePos.column);
+			Position below = new Position(spacePos.row + 1, spacePos.col);
 			copy.swap(spacePos, below);
 		} else if (move == Move.RIGHT) {
-			Position left = new Position(spacePos.row, spacePos.column - 1);
+			Position left = new Position(spacePos.row, spacePos.col - 1);
 			copy.swap(spacePos, left);
 		} else if (move == Move.DOWN) {
-			Position above = new Position(spacePos.row - 1, spacePos.column);
+			Position above = new Position(spacePos.row - 1, spacePos.col);
 			copy.swap(spacePos, above);
 		} else /*if (move == Move.LEFT)*/ {
-			Position right = new Position(spacePos.row, spacePos.column + 1);
+			Position right = new Position(spacePos.row, spacePos.col + 1);
 			copy.swap(spacePos, right);
 		}
 		
 		return copy;
 	}
 
+	@DataProvider(name="scrambleProvider")
+	public Object[][] scrambles() {
+		return new Object[][] {
+			{new Puzzle(3, 2, "4 1 3 0 2 5")},
+			{new Puzzle(3, 3, "8 5 7 4 1 0 2 6 3")},
+			{new Puzzle(4, 4, "1 2 3 0 5 6 7 4 9 10 11 8 13 14 15 12")},
+			{new Puzzle(4, 4, "0 1 2 3 5 6 7 4 9 10 11 8 13 14 15 12")},
+			{new Puzzle(4, 4, "12 3 9 4 11 1 6 10 2 13 7 0 5 8 14 15")}			
+		};
+	}
+	
+	@Test(dataProvider="scrambleProvider")
+	public void test(Puzzle puzzle) {
+		System.out.println(puzzle);
+		String solution = PuzzleSolver.calculateSolution(puzzle);
+		Assert.assertNotEquals(solution, PuzzleSolver.PATH_NOT_FOUND);
+	}
+	
 	public static void main(String[] args) {
-		Puzzle p = new Puzzle(4, 4, "1 2 3 0 5 6 7 4 9 10 11 8 13 14 15 12");
+		Puzzle p = new Puzzle(3, 2, "3 5 4 2 0 1");
 		System.out.println(p);
-		System.out.println();
-
-		System.out.println("Terminated");
+		System.out.println(PuzzleSolver.calculateSolution(p));
+		
+		System.out.println("\n\nTERMINATED");
 	}
 
 }

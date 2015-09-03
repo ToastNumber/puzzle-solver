@@ -11,15 +11,17 @@ public class Queue<T> {
 	}
 	
 	public T pop() {
-		int index = list.size() - 1;
-		T svaret = list.get(index);
-		list.remove(index);
-		
+		T svaret = list.get(0);
+		list.remove(0);
 		return svaret;
 	}
 	
 	public boolean isEmpty() {
 		return list.size() == 0;
+	}
+	
+	public String toString() {
+		return list.toString();
 	}
 	
 }
