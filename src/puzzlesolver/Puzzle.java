@@ -20,6 +20,39 @@ public class Puzzle {
 			}
 		}
 	}
+	
+	public int[][] getElements() {
+		return elements;
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Puzzle) {
+			Puzzle other = (Puzzle) o;
+
+			if (other.getWidth() != this.width || other.getHeight() != this.height) return false;
+			else {
+				int[][] otherElements = other.getElements();
+				
+				for (int row = 0; row < height; ++row) {
+					for (int col = 0; col < width; ++col) {
+						if (this.elements[row][col] != otherElements[row][col]) return false;
+					}
+				}
+				
+				return true;
+			}
+			
+		} else return false;
+	}
 
 	public String toString() {
 		String svaret = "";
