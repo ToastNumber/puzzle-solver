@@ -1,10 +1,10 @@
 package puzzlesolver;
 
-public class Puzzle {
+
+public class Puzzle implements Comparable<Puzzle> {
 	private final int[][] elements;
 	private final int width;
 	private final int height;
-	private final int hashCode;
 
 	public Puzzle(int width, int height, String data) {
 		if (!data.contains("0")) throw new IllegalArgumentException("No space");
@@ -19,8 +19,6 @@ public class Puzzle {
 					elements[row][col] = Integer.valueOf(split[row * width + col]);
 				}
 			}
-
-			hashCode = calculateHashCode();
 		}
 	}
 
@@ -28,7 +26,6 @@ public class Puzzle {
 		this.width = width;
 		this.height = height;
 		this.elements = elements;
-		hashCode = calculateHashCode();
 	}
 
 	public boolean isSolved() {
@@ -74,23 +71,17 @@ public class Puzzle {
 		} else return false;
 	}
 
-	public int calculateHashCode() {
-		int sum = 0;
-		int mul = (int) 10e10;
+	@Override
+	public int hashCode() {
+		String cat = "";
 		
 		for (int row = 0; row < height; ++row) {
 			for (int col = 0; col < width; ++col) {
-				sum += mul * elements[row][col];
-				mul = (mul >> 2);
+				cat += elements[row][col];
 			}
 		}
 
-		return sum;
-	}
-
-	@Override
-	public int hashCode() {
-		return this.hashCode;
+		return cat.hashCode();
 	}
 
 	public String toString() {
@@ -187,13 +178,32 @@ public class Puzzle {
 
 		return copy;
 	}
+	
+	public int getScore() {
+		int count = 0;
+		
+		for (int row = 0; row < height; ++row) {
+			for (int col = 0; col < width; ++col) {
+				if (elements[row][col] == row * width + col + 1) ++count;
+			}
+		}
+		
+		return count;
+	}
 
+	@Override
+	public int compareTo(Puzzle o) {
+		return this.getScore() - o.getScore();
+	}
+
+	
 	public static void main(String[] args) {
-		Puzzle p = new Puzzle(3, 3, "3 6 4 7 5 2 0 1 8");
-		//Puzzle p = new Puzzle(4, 4, "6 14 1 2 3 12 11 10 4 7 5 15 9 8 0 13");
+		//Puzzle p = new Puzzle(3, 3, "3 6 4 7 5 2 0 1 8");
+		Puzzle p = new Puzzle(4, 4, "6 14 1 2 3 12 11 10 4 7 5 15 9 8 0 13");
 		
 		System.out.println(p);
 		System.out.println(PuzzleSolver.calculateSolution(p));
 	}
+
 
 }

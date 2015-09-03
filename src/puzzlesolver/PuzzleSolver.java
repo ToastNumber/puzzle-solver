@@ -11,8 +11,8 @@ public class PuzzleSolver {
 	public static final String PATH_NOT_FOUND = "PATH NOT FOUND";
 
 	public static String calculateSolution(Puzzle puzzle) {
-		Queue<Puzzle> q = new Queue<>();
-		q.push(puzzle);
+		PriorityPuzzleQueue q = new PriorityPuzzleQueue();
+		q.add(puzzle);
 		Set<Puzzle> visited = new HashSet<>();
 		Map<Puzzle, Puzzle> map = new LinkedHashMap<>();
 
@@ -27,7 +27,7 @@ public class PuzzleSolver {
 
 					for (Puzzle successor : successors) {
 						if (!visited.contains(successor)) {
-							q.push(successor);
+							q.add(successor);
 							map.put(successor, current);
 						}
 					}
