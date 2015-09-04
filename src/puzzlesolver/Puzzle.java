@@ -195,13 +195,28 @@ public class Puzzle implements Comparable<Puzzle> {
 		return this.getScore() - o.getScore();
 	}
 
-	public static void main(String[] args) {
-		// Puzzle p = new Puzzle(3, 3, "3 6 4 7 5 2 0 1 8");
-		// Puzzle p = new Puzzle(4, 4, "6 14 1 2 3 12 11 10 4 7 5 15 9 8 0 13");
-		Puzzle p = new Puzzle(4, 4, "1 9 3 7 8 14 4 13 0 5 2 12 6 15 10 11");
-		
-		System.out.println(p);
-		System.out.println(PuzzleSolver.calculateSolution(p));
-	}
+	public static void main(String[] args) throws Exception {
+		if (args.length != 3) {
+			throw new Exception(String.format("Error: No. arguments given, %d; expected: 3", args.length));
+		} else {
+			int width, height;
+			String scramble;
 
+			try {
+				width = Integer.valueOf(args[0]);
+				height = Integer.valueOf(args[1]);
+				scramble = args[2];
+
+				Puzzle p = new Puzzle(width, height, scramble);
+				System.out.println(p);
+				System.out.println("Solution: " + PuzzleSolver.calculateSolution(p));
+			} catch (NumberFormatException e) {
+				System.err.println("Error: Dimensions must be integers, e.g. 3 3");
+				System.err.println("Expected: WIDTH HEIGHT \"SCRAMBLE\"");
+			} catch (Exception e) {
+				System.err.println("Error: Scramble must be valid and be a string of space-separated integers");
+				System.err.println("Expected: WIDTH HEIGHT \"SCRAMBLE\"");
+			}
+		}
+	}
 }
