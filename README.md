@@ -2,7 +2,12 @@
 This program can be used to generate a solution to sliding puzzles, such as the 15 puzzle. It can be controlled from the command line. The solutions generated are not optimal.
 
 ##Usage
-Compile the files in the src folder and place the compiled files in `bin/puzzlesolver`. Navigate to `bin/puzzlesolver` in the command line and then run the program using `java puzzlesolver/Puzzle WIDTH HEIGHT "DIMENSION"`.
+1. Compile the source files into a `bin/puzzlesolver` folder. 
+2. Navigate into `bin` folder.
+3. Run the program using `java puzzlesolver/Puzzle WIDTH HEIGHT "SCRAMBLE"`.
+	- `WIDTH` indicates the width of the puzzle
+	- `HEIGHT` indicates the height of the puzzle.
+	- `SCRAMBLE` indicates the tiles of the puzzle. 0 denotes a space. See the example below.
 
 ##Example
 To generate a solution to the following puzzle:
