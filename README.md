@@ -2,9 +2,7 @@
 This program can be used to generate a solution to sliding puzzles, such as the 15 puzzle. It can be controlled from the command line. The solutions generated are not optimal.
 
 ##Usage
-1. Compile the source files into a `bin/puzzlesolver` folder. 
-2. Navigate into `bin` folder.
-3. Run the program using `java puzzlesolver/Puzzle WIDTH HEIGHT "SCRAMBLE"`.
+Run the program using `java puzzlesolver/Puzzle WIDTH HEIGHT "SCRAMBLE"`.
 	- `WIDTH` indicates the width of the puzzle
 	- `HEIGHT` indicates the height of the puzzle.
 	- `SCRAMBLE` indicates the tiles of the puzzle. 0 denotes a space. See the example below.
@@ -14,7 +12,11 @@ The output will consist of a combination of the four letters `ULDR`.
 - `R` denotes a rightwards move.
 - `D` denotes a downwards move.
 - `L` denotes a leftwards move.
-	
+
+###Automated
+- `compile.bat` automatically compiles the source files into a bin folder.
+- `run.bat` automatically runs the program, and asks for the width, height, and scramble.
+
 ##Example
 To generate a solution to the following puzzle:
 ```
