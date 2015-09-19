@@ -24,8 +24,21 @@ To generate a solution to the following puzzle:
 0 4 1
 2 6 7
 ```
-Use the command ```java puzzlesolver/Puzzle 3 3 "8 3 5 0 4 1 2 6 7"```.
-The solution generated will be ```LLDRULURDLURDRULDRDLUURDLULDRURDLLURDRULL```.
+Run `run.bat` and enter
+```
+---Puzzle-Solver---
+
+Enter width: 3
+Enter height: 3
+Enter scramble: "8 3 5 0 4 1 2 6 7"
+```
+The output will be 
+```
+8 3 5
+0 4 1
+2 6 7
+Solution: LLDRULURDLURDRULDRDLUURDLULDRURDLLURDRULL
+```.
 
 ##Improvement
 The current solution uses a priority queue to direct the breadth-first search. In order to improve the algorithm's speed and/or move efficiency, a different heuristic can be used. A simple heuristic is being used currently, which can be improved to better the algorithm's performance.
