@@ -38,7 +38,7 @@ The output will be
 0 4 1
 2 6 7
 Solution: LLDRULURDLURDRULDRDLUURDLULDRURDLLURDRULL
-```.
+```
 
 ##Improvement
 The current solution uses a priority queue to direct the breadth-first search. In order to improve the algorithm's speed and/or move efficiency, a different heuristic can be used. A simple heuristic is being used currently, which can be improved to better the algorithm's performance.
